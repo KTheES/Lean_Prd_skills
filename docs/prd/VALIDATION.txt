@@ -1,0 +1,20 @@
+validate_prd — docs\prd
+
+WARN  [log] 11 검토 메모가 비어 있음 — 제출 전 검토 내역을 남길 것
+ok    [files] 12개 파일 존재
+ok    [header/meta] 검사 완료
+ok    [heading] 검사 완료
+ok    [placeholder] 검사 완료
+ok    [H#] 가설 3개 정의·참조 검사 완료
+ok    [M#] 지표-가설 커버리지 검사 완료
+ok    [MVP] In/Out 검사 완료
+ok    [stack] 기술 스택 표 검사 완료
+ok    [milestone] 마일스톤 검사 완료
+ok    [pivot] Pivot 트리거·옵션 검사 완료
+ok    [log] BML 로그 검사 완료
+ok    [events] 04/05 이벤트 6개 이름 일치
+ok    [team] 역할별 FTE·담당 MS 검사 완료
+ok    [threshold] 지표·실험 임계값 4개 일치
+
+결과: FAIL 0 · WARN 1 · ok 14
+=> 통과
