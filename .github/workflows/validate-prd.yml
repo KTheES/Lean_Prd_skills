@@ -26,7 +26,9 @@ jobs:
         with:
           python-version: "3.12"
       - name: Validate PRD structure
+        shell: bash
         run: |
+          set -o pipefail
           python3 .claude/skills/lean-prd/scripts/validate_prd.py docs/prd | tee docs/prd/VALIDATION.txt
       - name: Upload validation report
         if: always()
