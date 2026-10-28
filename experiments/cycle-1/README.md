@@ -8,6 +8,7 @@
 - `interview-template.md`: 익명 인터뷰 기록 양식
 - `results-template.csv`: 정량 집계용 빈 CSV
 - `analysis-template.md`: 임계값 비교와 결정 초안 양식
+- `mvp/index.html`: H1 문제 검증용 정적 랜딩 페이지. 버튼은 개인정보를 전송하지 않음
 
 ## 수집 절차
 
