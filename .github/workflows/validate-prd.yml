@@ -1,0 +1,40 @@
+# (가점 항목) PR마다 PRD 형식 검증을 자동 실행한다.
+# 강의 Section 08 "GitHub Actions로 메트릭 자동 수집"과 같은 원리:
+# 사람이 잊어도 파이프라인이 규격 위반을 잡는다.
+name: Validate PRD
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/validate-prd.yml"
+      - "docs/prd/**"
+      - ".claude/skills/lean-prd/SKILL.md"
+      - ".claude/skills/lean-prd/references/**"
+      - ".claude/skills/lean-prd/scripts/**"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/validate-prd.yml"
+      - "docs/prd/**"
+      - ".claude/skills/lean-prd/**"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Validate PRD structure
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 .claude/skills/lean-prd/scripts/validate_prd.py docs/prd | tee docs/prd/VALIDATION.txt
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: prd-validation
+          path: docs/prd/VALIDATION.txt

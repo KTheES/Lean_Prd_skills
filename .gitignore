@@ -1,0 +1,29 @@
+# 운영체제 / 편집기
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+dist/
+
+# 비밀·로컬 설정
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+
+# 실험 원본 중 공개 금지 자료
+experiments/**/private/
+experiments/**/raw-pii/
+
