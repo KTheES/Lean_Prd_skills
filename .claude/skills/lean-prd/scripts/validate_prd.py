@@ -12,6 +12,7 @@ validate_prd.py — lean-prd 스킬이 생성한 docs/prd/ 의 *형식*을 검�
     - 파일별 필수 헤딩 (references/prd-section-guide.md 와 동일)
     - 템플릿 자리표시자({{…}})와 TODO 잔존 여부
     - 가설 ID(H#)가 01에 정의되고 05·06·09에서 참조되는지
+    - 실험 ID(E#)가 06에 일관되게 정의되고 H#·M#·MS#와 연결되는지
     - 03의 In 항목에 가설 ID 또는 명시된 예외 사유가 있는지
     - 08 계층별 표의 6열이 비어 있지 않은지
     - 09 마일스톤 블록(MS0~MS3)에 검증 가설·숫자 종료 조건이 있는지
@@ -20,7 +21,7 @@ validate_prd.py — lean-prd 스킬이 생성한 docs/prd/ 의 *형식*을 검�
     - 11에 Cycle 0 블록과 검토 메모 섹션이 있는지
 
 검사하지 않는 것 (내용):
-    - 03 성공 기준 · 05 목표치 · 06 임계값 · 09 종료 조건의 숫자가 서로 같은지
+    - 03 성공 기준·09 종료 조건의 숫자가 05·06과 서로 같은지
     - 기술 스택 근거가 타당한지, 가격이 맞는지
     - 가설이 정말 "가장 위험한" 것인지
   → 이것들은 SKILL.md 4단계(교차 참조 검사)에서 사람이/모델이 확인한다.
@@ -30,10 +31,11 @@ ID 네임스페이스: 가설 H#, 지표 M#, 실험 E#, 마일스톤 MS#, Pivot 
 
 학생 확장 지점: 파일 하단 CUSTOM_RULES 에 함수를 추가한다 (과제 Part A-3).
 
-학생 확장 이력 (2026-10-28):
+학생 확장 이력 (2026-10-28, 2026-10-30):
     1. 04/05 분석 이벤트 이름 집합 일치 검사
     2. 07 역할별 숫자 FTE·담당 MS 검사
     3. 05 목표값과 06 통과 임계값의 숫자 일치 검사
+    4. 06의 E# 정의·중복·순번과 H#·M#·MS# 추적성 검사
 """
 from __future__ import annotations
 
@@ -87,6 +89,7 @@ H_ID_RE = re.compile(r"\bH\d+\b")
 M_ID_RE = re.compile(r"\bM\d+\b")
 MS_ID_RE = re.compile(r"\bMS\d+\b")
 P_ID_RE = re.compile(r"\bP\d+\b")
+E_ID_RE = re.compile(r"\bE\d+\b")
 NUMBER_RE = re.compile(r"\d")
 
 # ---------------------------------------------------------------------------
@@ -436,10 +439,104 @@ def rule_metric_thresholds_match(prd: Path, r: Report) -> None:
     elif not any("[threshold]" in msg for msg in r.fails):
         r.ok(f"[threshold] 지표·실험 임계값 {checked}개 일치")
 
+
+def rule_experiment_traceability(prd: Path, r: Report) -> None:
+    """06의 각 E#가 단일 H#·M#·MS#와 일관되게 연결되는지."""
+    t01 = read(prd, "01-problem-and-hypotheses.md")
+    t05 = read(prd, "05-metrics.md")
+    t06 = read(prd, "06-experiment-plan.md")
+    t09 = read(prd, "09-milestones.md")
+
+    hypotheses = {
+        row[0]
+        for row in table_rows(section(t01, "## 3. 가설 목록"))
+        if row and H_ID_RE.fullmatch(row[0])
+    }
+    metric_rows = table_rows(section(t05, "## 2. AARRR 지표"))
+    metrics = {
+        row[0]: set(H_ID_RE.findall(" ".join(row)))
+        for row in metric_rows
+        if row and M_ID_RE.fullmatch(row[0])
+    }
+    milestones = {
+        row[0]
+        for row in table_rows(section(t09, "## 1. 마일스톤 개요"))
+        if row and MS_ID_RE.fullmatch(row[0])
+    }
+
+    priority_rows = table_rows(section(t06, "## 1. 실험 우선순위"))
+    definitions: dict[str, tuple[str, str]] = {}
+    seen: list[str] = []
+    for row in priority_rows:
+        if len(row) < 4 or not E_ID_RE.fullmatch(row[0]):
+            continue
+        eid, hypothesis, milestone = row[0], row[1], row[3]
+        seen.append(eid)
+        if eid in definitions:
+            r.fail(f"[E#] 06 §1 중복 실험 ID: {eid}")
+            continue
+        definitions[eid] = (hypothesis, milestone)
+        if not H_ID_RE.fullmatch(hypothesis) or hypothesis not in hypotheses:
+            r.fail(f"[E#] {eid}: 정의되지 않은 가설 '{hypothesis}' 참조")
+        if not MS_ID_RE.fullmatch(milestone) or milestone not in milestones:
+            r.fail(f"[E#] {eid}: 정의되지 않은 마일스톤 '{milestone}' 참조")
+
+    if not definitions:
+        r.fail("[E#] 06 §1 실험 우선순위 표에서 E#를 찾지 못함")
+        return
+
+    expected = [f"E{i}" for i in range(1, len(definitions) + 1)]
+    if sorted(set(seen), key=lambda value: int(value[1:])) != expected:
+        r.fail(f"[E#] 실험 ID가 E1부터 연속적이지 않음: {sorted(set(seen))}")
+
+    design = section(t06, "## 2. 실험 설계")
+    blocks = re.split(r"^### (E\d+)\s+—\s+(H\d+)\s+검증\s*$", design, flags=re.M)
+    # [서문, E1, H1, 본문, E2, H2, 본문, ...]
+    block_map: dict[str, tuple[str, str]] = {}
+    for idx in range(1, len(blocks), 3):
+        eid, hypothesis, body = blocks[idx], blocks[idx + 1], blocks[idx + 2]
+        if eid in block_map:
+            r.fail(f"[E#] 06 §2 중복 실험 블록: {eid}")
+        block_map[eid] = (hypothesis, body)
+
+    for eid, (priority_h, _milestone) in definitions.items():
+        if eid not in block_map:
+            r.fail(f"[E#] {eid}: 06 §2 '### {eid} — H# 검증' 블록 누락")
+            continue
+        block_h, body = block_map[eid]
+        if block_h != priority_h:
+            r.fail(f"[E#] {eid}: 우선순위 가설 {priority_h} != 설계 블록 가설 {block_h}")
+        body_metrics = set(M_ID_RE.findall(body))
+        if not body_metrics:
+            r.fail(f"[E#] {eid}: Measure에 M# 지표 참조 없음")
+        for metric in body_metrics:
+            if metric not in metrics:
+                r.fail(f"[E#] {eid}: 05에 정의되지 않은 지표 {metric} 참조")
+            elif priority_h not in metrics[metric]:
+                r.fail(f"[E#] {eid}: {metric}이 05에서 가설 {priority_h}에 연결되지 않음")
+
+    extras = sorted(set(block_map) - set(definitions))
+    if extras:
+        r.fail(f"[E#] 06 §2에만 있고 §1에 없는 실험: {', '.join(extras)}")
+
+    for heading in ("## 3. 판단 기준", "## 4. 일정과 샘플"):
+        refs = {
+            row[0]
+            for row in table_rows(section(t06, heading))
+            if row and E_ID_RE.fullmatch(row[0])
+        }
+        missing = sorted(set(definitions) - refs)
+        if missing:
+            r.fail(f"[E#] {heading}: {', '.join(missing)} 누락")
+
+    if not any("[E#]" in msg for msg in r.fails):
+        r.ok(f"[E#] 실험 {len(definitions)}개 H#·M#·MS# 추적성 검사 완료")
+
 CUSTOM_RULES: list = [
     rule_events_match,
     rule_team_fte,
     rule_metric_thresholds_match,
+    rule_experiment_traceability,
 ]
 
 # ---------------------------------------------------------------------------

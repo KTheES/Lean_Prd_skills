@@ -2,7 +2,7 @@
 
 점검 기준: `00_과제명세서.md`, `01_채점루브릭.md`, `02_제출가이드_FAQ.md`, `CODEX_HANDOFF_lean_prd.md`
 
-점검일: 2026-10-28
+점검일: 2026-10-30
 
 ## Part A — Skill 설계
 
@@ -15,8 +15,8 @@
 - [x] 결정별 갱신 파일이 있는 cycle 모드
 - [x] 참조 문서 읽는 시점 안내
 - [x] 이미지 유사도·권리 위험 탐지 도메인 보강과 변경 이력
-- [x] 사용자 검증 규칙 3개 추가
-- [x] 세 규칙의 실제 오류 탐지 증빙
+- [x] 사용자 검증 규칙 4개 추가
+- [x] 네 규칙의 실제 오류 탐지 증빙
 - [x] Skill Creator `quick_validate.py`: `Skill is valid!`
 - [x] 특정 제품명을 SKILL.md에 하드코딩하지 않음
 
@@ -31,10 +31,10 @@
 - [x] MVP 유형, In/Out, 모든 In의 H# 또는 측정 예외, 10영업일 범위
 - [x] 역할·기술·FTE·담당 MS·충원 조건·결정 규칙
 - [x] 기술 스택 6열, Mermaid, 분석/Feature Flag, ADR, 지금 하지 않을 것
-- [x] GitHub Pages·Actions·PostHog 공식 출처와 2026-10-28 확인일
+- [x] GitHub Pages·Actions·PostHog 공식 출처와 2026-10-30 확인일
 - [x] MS0~MS3의 H#·산출물·숫자 종료 조건·Go/No-Go·P#
 - [x] GitHub 매핑과 Mermaid 일정
-- [x] `VALIDATION.txt`: FAIL 0, WARN 1, ok 14
+- [x] `VALIDATION.txt`: FAIL 0, WARN 1, ok 15
 - [ ] 학생이 AI 초안을 직접 읽고 수정한 별도 커밋
 - [ ] `11-bml-log.md` 검토 메모에 학생의 실제 수정 이유 기록
 - [ ] 첫 10명 접근 채널을 실제 연락 가능한 집단으로 확정

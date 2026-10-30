@@ -15,6 +15,7 @@ ok    [log] BML 로그 검사 완료
 ok    [events] 04/05 이벤트 6개 이름 일치
 ok    [team] 역할별 FTE·담당 MS 검사 완료
 ok    [threshold] 지표·실험 임계값 4개 일치
+ok    [E#] 실험 4개 H#·M#·MS# 추적성 검사 완료
 
-결과: FAIL 0 · WARN 1 · ok 14
+결과: FAIL 0 · WARN 1 · ok 15
 => 통과

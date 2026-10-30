@@ -2,7 +2,7 @@
 
 | 제품 | 버전 | 최종 수정 | 관련 가설 |
 |---|---|---|---|
-| ArtGuard | 0.1 | 2026-10-28 | 전체 |
+| ArtGuard | 0.1 | 2026-10-30 | 전체 |
 
 선택 원칙: 2주 내 첫 사용자 도달, 측정 가능성, 팀 숙련도, 무료·종량제 시작, Pivot 시 폐기 비용 최소화.
 
@@ -27,9 +27,9 @@ MS0~MS1은 이미지 처리 API나 자동 크롤러 없이 문제·리포트 가
 | 백엔드 / API | 없음, PM 수동 Concierge | H2를 서버 없이 검증 | FastAPI는 가치 검증 전 운영비용 | ₩0 | 참여자 10명 또는 리포트 20건을 넘으면 FastAPI 검토 |
 | 데이터 | 익명 CSV와 Git 비추적 private 원본 | 소표본 집계·감사가 쉬움 | PostgreSQL은 MS0에 과함 | ₩0 | 동시 편집 또는 100건 이상이면 관리형 PostgreSQL 검토 |
 | 인증 | 공개 랜딩+일회성 비식별 리포트 링크 | H1/H2에 계정이 필요 없음 | OAuth는 핵심 가설과 무관 | ₩0 | 권한 분리·재방문이 M4 측정에 필수일 때 이메일 매직링크 검토 |
-| 호스팅 / 배포 | GitHub Pages | 공개 저장소 정적 사이트에 사용 가능 | Vercel은 현재 기능에 불필요 | ₩0, [공식 문서](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages) 2026-10-28 확인 | 비공개 데이터·서버 처리가 필요하면 분리 호스팅 |
-| 분석 · 실험 | CSV 우선, PostHog 무료 구간 | 이벤트·Feature Flag를 한 도구에서 확장 가능 | GA4는 제품 행동 분석이 약함 | ₩0, 월 분석 100만 이벤트·Feature Flag 100만 요청 무료 구간 [공식 가격](https://posthog.com/pricing) 2026-10-28 확인 | 무료 한도 또는 개인정보 요구 초과 시 셀프호스팅/대안 검토 |
-| CI/CD | GitHub Actions | PR마다 Python 검증 자동화 | 수동 실행은 누락 위험 | 공개 저장소 표준 러너 ₩0, [공식 문서](https://docs.github.com/en/actions/concepts/billing-and-usage) 2026-10-28 확인 | 대형 러너·비공개 전환 시 비용 재산정 |
+| 호스팅 / 배포 | GitHub Pages | 공개 저장소 정적 사이트에 사용 가능 | Vercel은 현재 기능에 불필요 | ₩0, [공식 문서](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages) 2026-10-30 확인 | 비공개 데이터·서버 처리가 필요하면 분리 호스팅 |
+| 분석 · 실험 | CSV 우선, PostHog 무료 구간 | 이벤트·Feature Flag를 한 도구에서 확장 가능 | GA4는 제품 행동 분석이 약함 | ₩0, 월 분석 100만 이벤트·Feature Flag 100만 요청 무료 구간 [공식 가격](https://posthog.com/pricing) 2026-10-30 확인 | 무료 한도 또는 개인정보 요구 초과 시 셀프호스팅/대안 검토 |
+| CI/CD | GitHub Actions | PR마다 Python 검증 자동화 | 수동 실행은 누락 위험 | 공개 저장소 표준 러너 ₩0, [공식 문서](https://docs.github.com/en/actions/concepts/billing-and-usage) 2026-10-30 확인 | 대형 러너·비공개 전환 시 비용 재산정 |
 | AI/ML | MS0~MS1 미사용, 수동 비교 | 모델 품질보다 리포트 가치 가설을 먼저 검증 | CLIP·관리형 비전 API는 학습 목표를 앞섬 | ₩0 | M2 ≥ 50%와 평가용 정답 쌍 50개 확보 시 임베딩 비교 실험 |
 
 ### ADR-1: MS0~MS1은 자동 탐지 대신 Concierge
