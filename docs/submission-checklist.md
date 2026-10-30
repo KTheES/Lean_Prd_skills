@@ -8,7 +8,7 @@
 
 - [x] `.claude/skills/lean-prd/SKILL.md`와 올바른 frontmatter
 - [x] 기능과 자연어 트리거 5종 이상, cycle 진입 조건
-- [x] 본문 500줄 이하: 183줄
+- [x] 본문 500줄 이하
 - [x] 최대 5개 질문과 미응답 기본 가정
 - [x] Learn→Measure→Build 역산과 `00-overview` 마지막 작성 이유
 - [x] H#/M#/E#/MS#/P#/T# 교차 참조 규칙
@@ -57,14 +57,14 @@ Cycle 1은 실제 데이터 5건으로 완료했다. E2 proxy 60%는 자기보�
 
 ## Part D — 회고·제출
 
-- [x] `RETROSPECTIVE.md` 1~2쪽 분량 초안
+- [x] `RETROSPECTIVE.md` 1~2쪽 분량 완성
 - [x] 구체적인 검증기 Before/After
 - [x] 실제 팀 확장 방향
 - [x] `docs/skill-session.md`에 Codex 실행 환경과 질문·가정 기록
 - [x] 민감정보 패턴 검사와 `.gitignore`
 - [x] PR마다 검증하는 GitHub Actions 구성
 - [x] 파이프라인에 `set -o pipefail`을 적용해 검증 실패가 CI 실패로 전파됨
-- [ ] 학생 표현으로 회고의 사람 검토 항목 확정
+- [x] 학생 표현으로 회고의 사람 검토 항목 확정
 - [x] Codex 환경에서 자연어 트리거와 cycle 모드 재현
 - [ ] 최종 CI 성공 확인
 - [ ] 실제 Cycle 1까지 마친 뒤 `v1.0` 태그 생성
@@ -75,7 +75,7 @@ Cycle 1은 실제 데이터 5건으로 완료했다. E2 proxy 60%는 자기보�
 - Part A: 구현·로컬 검증 완료
 - Part B: 문서·자동 검증 및 사람 수정 메모 완료
 - Part C: 실제 5명으로 Build·Measure·Learn과 P1 반영 완료
-- Part D: 초안 완료, 사람 회고·최종 태그 대기
+- Part D: 사람 회고 완료, 최종 CI·태그·제출 대기
 
-따라서 현재 브랜치는 **Cycle 1까지 완료**했으며, 사람 회고 확정·최종 CI·`v1.0` 태그가 남았다.
+따라서 현재 브랜치는 **사람 검토까지 완료**했으며, Pull Request CI·병합·`v1.0` 태그·제출이 남았다.
 

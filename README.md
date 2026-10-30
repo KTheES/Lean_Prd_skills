@@ -15,7 +15,7 @@
 | Skill 호출 기록 | [`docs/skill-session.md`](docs/skill-session.md) | Codex 실행 기록 |
 | 검증 규칙 증빙 | [`docs/validator-development.md`](docs/validator-development.md) | 오류 주입 사례 |
 | Cycle 1 증빙 | [`experiments/cycle-1/`](experiments/cycle-1/) | 실제 5명·분석·결정 완료 |
-| 회고 | [`RETROSPECTIVE.md`](RETROSPECTIVE.md) | 초안, 사람 확정 필요 |
+| 회고 | [`RETROSPECTIVE.md`](RETROSPECTIVE.md) | 사람 검토 완료 |
 
 ## 사용법
 
@@ -51,12 +51,11 @@ python .claude/skills/lean-prd/scripts/validate_prd.py docs/prd --strict
 
 Pull Request와 `main` push 시 [Validate PRD 워크플로우](.github/workflows/validate-prd.yml)가 같은 검사를 자동 실행하고 결과를 아티팩트로 저장합니다.
 
-## 아직 사람이 해야 하는 일
+## 최종 제출 전 남은 일
 
-1. `docs/prd/11-bml-log.md`의 검토 메모를 읽고 본인이 실제로 고친 이유가 맞는지 확인합니다.
-2. `RETROSPECTIVE.md`의 `TODO(사람 검토)` 세 곳을 본인 경험과 표현으로 확정합니다.
-3. Pull Request의 CI 성공과 공개 파일의 개인정보 부재를 확인합니다.
-4. 최종 확인 후 `v1.0` 태그를 만들고 저장소 URL과 태그 URL을 제출합니다.
+1. 사람 검토 커밋으로 Pull Request를 만들고 CI 성공을 확인합니다.
+2. `main` 병합 후 `v1.0` 태그를 만듭니다.
+3. 저장소 URL과 태그 URL을 제출합니다. Private 저장소라면 교수자·조교를 Collaborator로 초대합니다.
 
 ## 민감정보 원칙
 
