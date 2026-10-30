@@ -98,18 +98,30 @@ def summary():
         r for r in rows
         if r.get("creator_exp") == "있음" or any(word in r.get("participant_type", "") for word in creator_words)
     ]
-    m1_pass = [r for r in eligible if r.get("check_freq") == "월1회이상" and r.get("followup_intent") == "있음"]
+    creator_m1_pass = [r for r in eligible if r.get("check_freq") == "월1회이상" and r.get("followup_intent") == "있음"]
+    # Cycle 1에서 승인된 P1은 창작 경험이 아니라 반복적인 굿즈 확인 문제를
+    # 진입 조건으로 삼는다. 설문 완료자는 모두 소비자 탐색 표본으로 집계한다.
+    consumer_eligible = [r for r in rows if r.get("check_freq")]
+    consumer_m1_pass = [
+        r for r in consumer_eligible
+        if r.get("check_freq") == "월1회이상" and r.get("followup_intent") == "있음"
+    ]
     out = [f"# Cycle-1 집계 (n={len(rows)}, 생성 {datetime.date.today()})\n", "## E1 문제 검증 (M1)"]
     if eligible:
-        rate = len(m1_pass) / len(eligible) * 100
+        rate = len(creator_m1_pass) / len(eligible) * 100
         out += [
-            f"- 적합 참여자: {len(eligible)}명 (" + ", ".join(r["participant_id"] for r in eligible) + ")",
-            f"- 월 1회 이상 문제 경험 + 후속 참여 있음: {len(m1_pass)}명",
-            f"- **M1 = {len(m1_pass)}/{len(eligible)} = {rate:.1f}%**",
-            "- 사전 기준: 60% 이상 통과, 40% 미만 실패, 40~60% 표본 확대",
+            f"- 기존 창작자 적합 표본: {len(eligible)}명 (" + ", ".join(r["participant_id"] for r in eligible) + ")",
+            f"- 기존 세그먼트 M1: {len(creator_m1_pass)}/{len(eligible)} = {rate:.1f}% (최소 표본 5명 미충족)",
         ]
     else:
         out.append("- 창작·굿즈 제작/판매 경험으로 적합성을 확인할 참여자가 없음")
+    consumer_rate = len(consumer_m1_pass) / len(consumer_eligible) * 100 if consumer_eligible else 0
+    out += [
+        f"- P1 소비자 적합 표본: {len(consumer_eligible)}명 (" + ", ".join(r["participant_id"] for r in consumer_eligible) + ")",
+        f"- 월 1회 이상 문제 경험 + 후속 참여 있음: {len(consumer_m1_pass)}명",
+        f"- **Pivot 후 M1 = {len(consumer_m1_pass)}/{len(consumer_eligible)} = {consumer_rate:.1f}%**",
+        "- 사전 기준: 60% 이상 통과, 40% 미만 실패, 40~60% 표본 확대",
+    ]
     out += ["", "## E2 리포트 항목 유용성 (1~5)\n", "| 항목 | 평균 | 4점 이상 비율 |", "|---|---|---|"]
     for k in SCORES:
         v = [int(r[k]) for r in rows if r[k]]
@@ -117,6 +129,15 @@ def summary():
             out.append(f"| {SCORE_LABELS[k]} | {statistics.mean(v):.2f} | {sum(x>=4 for x in v)}/{len(v)} |")
         else:
             out.append(f"| {SCORE_LABELS[k]} | 측정 없음 | 0/0 |")
+    action_rows = [r for r in rows if r.get("action_after_report")]
+    action_selected = [r for r in action_rows if r.get("action_after_report") != "행동없음"]
+    if action_rows:
+        proxy_rate = len(action_selected) / len(action_rows) * 100
+        out += [
+            "",
+            f"- **M2 proxy = {len(action_selected)}/{len(action_rows)} = {proxy_rate:.1f}%**",
+            "- 주의: 실제 `evidence_action_selected` 이벤트가 아니라 면담에서 선택한 의향이므로 E2 완료 근거로 사용하지 않음",
+        ]
     def dist(k):
         c = collections.Counter(r[k] for r in rows if r[k]); return ", ".join(f"{a} {b}명" for a, b in c.most_common())
     mins = [float(r["current_minutes"]) for r in rows if r["current_minutes"].replace(".","",1).isdigit()]

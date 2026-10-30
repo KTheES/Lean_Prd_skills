@@ -1,6 +1,5 @@
 validate_prd — docs\prd
 
-WARN  [log] 11 검토 메모가 비어 있음 — 제출 전 검토 내역을 남길 것
 ok    [files] 12개 파일 존재
 ok    [header/meta] 검사 완료
 ok    [heading] 검사 완료
@@ -17,5 +16,5 @@ ok    [team] 역할별 FTE·담당 MS 검사 완료
 ok    [threshold] 지표·실험 임계값 4개 일치
 ok    [E#] 실험 4개 H#·M#·MS# 추적성 검사 완료
 
-결과: FAIL 0 · WARN 1 · ok 15
+결과: FAIL 0 · WARN 0 · ok 15
 => 통과
