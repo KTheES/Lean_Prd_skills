@@ -158,7 +158,10 @@ class SurveyApp:
         self._combo("participant_type", "1. 참여자 유형", PARTICIPANT_TYPES)
         self._radio("creator_exp", "2. 온라인에 작품을 공개하거나 굿즈로 판매한 경험", ["있음", "없음"])
         self._entry("creator_form", "2-1. 경험이 있다면 간단한 형태 (없으면 비워 두기)")
-        self._entry("seen_case_route", "3. 치이카와 유사성 논란 사례를 처음 본 경로 (모르면 ‘본 적 없음’)")
+        self._entry(
+            "seen_case_route",
+            "3. 최근 접한 유사 굿즈·이미지 논란 사례와 처음 본 경로 (없으면 ‘본 적 없음’)",
+        )
 
         ttk.Label(self.form, text="4. 그 사례에서 궁금했던 정보 (복수 선택)", style="Question.TLabel").pack(anchor="w", pady=(12, 5))
         checks = ttk.Frame(self.form)
