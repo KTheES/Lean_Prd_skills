@@ -9,6 +9,19 @@
 - `results-template.csv`: 정량 집계용 빈 CSV
 - `analysis-template.md`: 임계값 비교와 결정 초안 양식
 - `mvp/index.html`: H1 문제 검증용 정적 랜딩 페이지. 버튼은 개인정보를 전송하지 않음
+- `survey_gui.py`: E1 문제 검증과 E2 리포트 평가를 통합한 로컬 GUI 입력기
+- `run-survey.bat`: Windows에서 더블 클릭으로 GUI를 실행하는 런처
+- `responses.csv`: GUI·CLI가 함께 사용하는 비식별 응답 원장
+
+## 통합 GUI 실행
+
+Windows 파일 탐색기에서 `run-survey.bat`를 더블 클릭하거나 저장소 루트에서 다음을 실행한다.
+
+```powershell
+python experiments/cycle-1/survey_gui.py
+```
+
+응답은 `responses.csv`와 `participants/P##.md`에 동시 저장된다. 이름·연락처·계정명은 입력하지 않는다. E1의 M1은 참여자 적합성, `월1회이상`, `후속 참여 있음`을 기준으로 계산하고 E2의 리포트 점수와 구분해 해석한다.
 
 ## 수집 절차
 
